@@ -9,7 +9,8 @@ fmt: clean
 	gofmt -w -s *.go
 
 setup: fmt
-	rsync -rav ~/i2p/certificates/ certificates
+	rsync -rav ~/i2p/certificates/ssl/ ssl/
+	rsync -rav ~/i2p/certificates/reseed/ reseed/
 
 build: fmt
 	go build -o reseed-monitor/reseed-monitor ./reseed-monitor
