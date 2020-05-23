@@ -11,7 +11,7 @@ import (
 
 func main() {
 	go loop()
-	if err := http.ListenAndServe("127.0.0.1:7672", &monitor.MonitorServer{}); err != nil {
+	if err := http.ListenAndServe("0.0.0.0:7672", &monitor.MonitorServer{}); err != nil {
 		log.Fatal(err)
 	}
 }
