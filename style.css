@@ -1,3 +1,37 @@
 .Reseed {
 	border: 1px solid black;
 }
+
+.key {
+	border: 1px solid black;
+	min-width: 20%;
+	min-height: 15px;
+	display: inline-block;
+	overflow: scroll;
+	margin-left: 3%;
+}
+
+.value {
+	border: 1px solid black;
+	min-width: 70%;
+	max-width: 70%;
+	font-family: monospace;
+	min-height: 15px;
+	display: inline-block;
+	overflow: scroll;
+	margin-left: 3%;
+}
+
+.Valid {
+	overflow: scroll;
+	min-width: 90%;
+	max-width: 90%;
+	margin-left: 5%;
+}
+
+.Invalid {
+	overflow: scroll;
+	min-width: 90%;
+	max-width: 90%;
+	margin-left: 5%;
+}

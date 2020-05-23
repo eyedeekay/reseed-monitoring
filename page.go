@@ -78,9 +78,9 @@ func GeneratePage() (string, error) {
 							}
 							Valid, Errored := CheckKeys(su3file, "./reseed")
 							if Errored != nil {
-								ret += `<div id="` + TrimDir(path) + ` Invalid">` + Errored.Error() + `</div>`
+								ret += `<div class="` + TrimDir(path) + ` Invalid">` + Errored.Error() + `</div>`
 							} else {
-								ret += `<div id="` + TrimDir(path) + ` Valid">` + Valid + `</div>`
+								ret += `<div class="` + TrimDir(path) + ` Valid">` + Valid + `</div>`
 							}
 						}
 					} else {

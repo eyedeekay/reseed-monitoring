@@ -6,7 +6,7 @@ gen:
 	#go run -tags generate gen.go
 
 fmt: clean
-	gofmt -w -s *.go
+	gofmt -w -s *.go reseed-monitor/main.go
 
 setup: fmt
 	rsync -rav ~/i2p/certificates/ssl/ ssl/

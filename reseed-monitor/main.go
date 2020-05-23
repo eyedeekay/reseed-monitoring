@@ -1,25 +1,41 @@
 package main
 
 import (
-	"log"
-	"github.com/eyedeekay/reseed-monitoring"
 	"io/ioutil"
+	"log"
+	"net/http"
+	"time"
+
+	"github.com/eyedeekay/reseed-monitoring"
 )
 
 func main() {
-	config, err := monitor.SortedMap("config.json")
-	if err != nil {
+	go loop()
+	if err := http.ListenAndServe("127.0.0.1:7672", &monitor.MonitorServer{}); err != nil {
 		log.Fatal(err)
 	}
-	errs := monitor.SortedMonitor(config)
-	if errs != nil {
-		if len(errs) > 0 {
-			log.Println(errs)
+}
+
+func loop() {
+	for {
+		config, err := monitor.SortedMap("config.json")
+		if err != nil {
+			log.Fatal(err)
 		}
+		errs := monitor.SortedMonitor(config)
+		if errs != nil {
+			if len(errs) > 0 {
+				log.Println(errs)
+			}
+		}
+		index, err := monitor.GeneratePage()
+		if err != nil {
+			log.Fatal(err)
+		}
+		err = ioutil.WriteFile("index.html", []byte(index), 0644)
+		if err != nil {
+			log.Fatal(err)
+		}
+		time.Sleep(time.Duration(24 * time.Hour))
 	}
-	index, err := monitor.GeneratePage()
-	if err != nil {
-		log.Fatal(err)
-	}
-	ioutil.WriteFile("index.html", []byte(index), 0644)
 }
