@@ -1,0 +1,10 @@
+{
+	"i2p.mooo.com/netDb": "ssl/i2p.mooo.com.crt",
+	"i2p.novg.net": "le",
+	"i2pseed.creativecowpat.net:8443": "ssl/i2pseed.creativecowpat.net.crt",
+	"reseed.i2p2.no": "le",
+	"reseed.i2pgit.org": "le",
+	"reseed.memcpy.io": "le",
+	"reseed.onion.im": "ssl/reseed.onion.im.crt"
+}
+
