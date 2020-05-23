@@ -13,7 +13,7 @@ func (m *MonitorServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	path := strings.TrimSpace(strings.Replace(r.URL.Path, "/", "", -1))
 	//path = strings.Replace(r.URL.Path, ".", "", -1)
 	if r.URL.Path == "/" {
-		r.URL.Path = "/index.html"
+		path = "index.html"
 	}
 
 	if strings.HasSuffix(r.URL.Path, ".css") {
