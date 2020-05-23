@@ -12,11 +12,14 @@ setup: fmt
 	rsync -rav ~/i2p/certificates/ssl/ ssl/
 	rsync -rav ~/i2p/certificates/reseed/ reseed/
 
-build: fmt
+build: fmt deps
 	go build -o reseed-monitor/reseed-monitor ./reseed-monitor
 
 run: build
 	./reseed-monitor/reseed-monitor
+
+deps:
+	go get -d -u ./...
 
 clean: gen
 	rm -rf reseed-monitoring reseed-monitor/reseed-monitor \
@@ -30,3 +33,6 @@ clean: gen
 		i2p.mooo.com/ \
 		data-dir*/
 
+docker:
+	docker build -t eyedeekay/reseed-monitoring .
+	docker run -itd --name reseed-monitoring -p 127.0.0.1:7672:7672 eyedeekay/reseed-monitoring
