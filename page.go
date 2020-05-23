@@ -36,7 +36,7 @@ func GeneratePageData() []error {
 
 func GeneratePage() (string, error) {
 	var ret string
-	ret += headline
+	var menu string
 	err := filepath.Walk(".",
 		func(path string, info os.FileInfo, err error) error {
 			if err != nil {
@@ -44,7 +44,9 @@ func GeneratePage() (string, error) {
 			}
 			if strings.HasSuffix(info.Name(), ".json") {
 				if info.Name() != "config.json" {
-					ret += "\n" + `  <div class="` + TrimDir(path) + `">` + "\n"
+					ret += "\n" + `  <div class="` + TrimDir(path) + `" id="` + TrimDir(path) + `">` + "\n"
+					ret += "\n" + `    <h4><a href="#` + TrimDir(path) + `">` + filepath.Dir(path) + "</a></h4>\n"
+					menu += "\n" + `  <h3><a class="` + TrimDir(path) + `" href="#` + TrimDir(path) + `">` + filepath.Dir(path) + "</a></h3>\n"
 					f, e := ioutil.ReadFile(path)
 					if e == nil {
 						pre := string(f)
@@ -57,9 +59,9 @@ func GeneratePage() (string, error) {
 							if ky != "Content" {
 								ret += `    <div class="` + TrimDir(path) + ` keyvalue">`
 								ret += "\n" + `      <span class="` + TrimDir(path) + " " + ky + ` key">` + ky + "\n"
-								ret += "\n     </span>\n"
-								ret += "\n" + `     <span class="` + TrimDir(path) + " " + ky + ` value">` + vy + "\n"
-								ret += "\n    </span>\n"
+								ret += "\n      </span>\n"
+								ret += "\n" + `      <span class="` + TrimDir(path) + " " + ky + ` value">` + vy + "\n"
+								ret += "\n      </span>\n"
 							}
 							ret += `    </div>`
 						}
@@ -76,8 +78,7 @@ func GeneratePage() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	ret += footline
-	return gohtml.Format(ret), nil
+	return gohtml.Format(headline + menu + ret + footline), nil
 }
 
 func TrimDir(path string) string {
