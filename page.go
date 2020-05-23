@@ -52,17 +52,18 @@ func GeneratePage() (string, error) {
 						pre = strings.TrimSuffix(pre, "}")
 						pre = strings.Replace(pre, `"`, "", -1)
 						pre2 := strings.Split(pre, ",")
-						ret += `    <div class="` + TrimDir(path) + ` keyvalue">`
 						for _, v := range pre2 {
 							ky, vy := Split2(v)
 							if ky != "Content" {
+								ret += `    <div class="` + TrimDir(path) + ` keyvalue">`
 								ret += "\n" + `      <span class="` + TrimDir(path) + " " + ky + ` key">` + ky + "\n"
 								ret += "\n     </span>\n"
 								ret += "\n" + `     <span class="` + TrimDir(path) + " " + ky + ` value">` + vy + "\n"
 								ret += "\n    </span>\n"
 							}
+							ret += `    </div>`
 						}
-						ret += `    </div>`
+
 					} else {
 						ret = e.Error()
 					}
