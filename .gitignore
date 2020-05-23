@@ -1,5 +1,5 @@
 reseed-monitoring
-reseed-monitor/reseed-monitor \
+reseed-monitor/reseed-monitor
 i2pseed.creativecowpat.net:8443/ 
 reseed.i2p2.no/ 
 reseed.i2pgit.org/ 
