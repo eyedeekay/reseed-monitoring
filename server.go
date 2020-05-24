@@ -2,6 +2,7 @@ package monitor
 
 import (
 	"io/ioutil"
+	"log"
 	"net/http"
 	"strings"
 )
@@ -10,12 +11,13 @@ type MonitorServer struct {
 }
 
 func (m *MonitorServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	path := strings.TrimSpace(strings.Replace(r.URL.Path, "/", "", -1))
+	path := strings.TrimSpace(strings.Replace(r.URL.Path, "/", "", 1))
 	//path = strings.Replace(r.URL.Path, ".", "", -1)
 	if r.URL.Path == "/" {
 		path = "index.html"
 	}
 
+	log.Println(path)
 	if strings.HasSuffix(r.URL.Path, ".css") {
 		w.Header().Set("Content-Type", "text/css")
 	} else if strings.HasSuffix(r.URL.Path, ".js") {
