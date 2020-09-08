@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"time"
+	"strings"
 	//"path"
 
 	"github.com/cretz/bine/tor"
@@ -15,11 +16,17 @@ import (
 func FetchReseed(url, cert string) ([]byte, error) {
 	url = url + "/i2pseeds.su3"
 	// Start tor with default config (can set start conf's DebugWriter to os.Stdout for debug logs)
-	t, err := tor.Start(nil, nil)
-	if err != nil {
-		return nil, err
+	onion := false
+	var t *tor.Tor
+	if strings.Contains(url, ".onion") {
+		onion = true
+		var err error
+		t, err = tor.Start(nil, nil)
+		if err != nil {
+			return nil, err
+		}
+		defer t.Close()
 	}
-	defer t.Close()
 	// Wait at most a minute to start network and get
 	dialCtx, dialCancel := context.WithTimeout(context.Background(), time.Minute)
 	defer dialCancel()
@@ -36,19 +43,26 @@ func FetchReseed(url, cert string) ([]byte, error) {
 		caCertPool := x509.NewCertPool()
 		caCertPool.AppendCertsFromPEM(caCert)
 
-		//	cert, err := tls.LoadX509KeyPair("client.crt", "client.key")
-		//	if err != nil {
-		//		log.Fatal(err)
-		//	}
+		var client *http.Client
 
-		client := &http.Client{
-			Transport: &http.Transport{
-				TLSClientConfig: &tls.Config{
-					RootCAs: caCertPool,
-					//				Certificates: []tls.Certificate{cert},
+		if onion {
+			client = &http.Client{
+				Transport: &http.Transport{
+					TLSClientConfig: &tls.Config{
+						RootCAs: caCertPool,
+					},
+					DialContext: dialer.DialContext,
 				},
-				DialContext: dialer.DialContext,
-			},
+			}
+		} else {
+			client = &http.Client{
+				Transport: &http.Transport{
+					TLSClientConfig: &tls.Config{
+						RootCAs: caCertPool,
+					},
+					//					DialContext: dialer.DialContext,
+				},
+			}
 		}
 
 		req, err := http.NewRequest("GET", url, nil)
@@ -71,14 +85,11 @@ func FetchReseed(url, cert string) ([]byte, error) {
 
 		return body, nil
 	}
-	client := &http.Client{
-		/*Transport: &http.Transport{
-			TLSClientConfig: &tls.Config{
-				RootCAs: caCertPool,
-				//				Certificates: []tls.Certificate{cert},
-			},
-		},*/
-		Transport: &http.Transport{DialContext: dialer.DialContext},
+	var client *http.Client
+	if onion {
+		client = &http.Client{
+			Transport: &http.Transport{DialContext: dialer.DialContext},
+		}
 	}
 
 	req, err := http.NewRequest("GET", url, nil)
