@@ -11,10 +11,10 @@ import (
 )
 
 //func MakeReseedData(url, cert string) (map[string]string, error) {
-func MakeReseedData(url, cert string) (*su3.File, error) {
+func MakeReseedData(url, cert string, onion bool) (*su3.File, error) {
 	//	var m map[string]string
 	url = PrepURL(url)
-	su3bytes, err := FetchReseed(url, cert)
+	su3bytes, err := FetchReseed(url, cert, onion)
 	if err != nil {
 		return nil, err
 	}
@@ -39,8 +39,8 @@ func MakeReseedData(url, cert string) (*su3.File, error) {
 	return su3file, nil
 }
 
-func MakeReseedDataMap(url, cert string) (map[string]string, error) {
-	su3data, err := MakeReseedData(url, cert)
+func MakeReseedDataMap(url, cert string, onion bool) (map[string]string, error) {
+	su3data, err := MakeReseedData(url, cert, onion)
 	if err != nil {
 		return nil, err
 	}

@@ -13,10 +13,9 @@ import (
 	"github.com/cretz/bine/tor"
 )
 
-func FetchReseed(url, cert string) ([]byte, error) {
+func FetchReseed(url, cert string, onion bool) ([]byte, error) {
 	url = url + "/i2pseeds.su3"
 	// Start tor with default config (can set start conf's DebugWriter to os.Stdout for debug logs)
-	onion := false
 	var t *tor.Tor
 	if strings.Contains(url, ".onion") {
 		onion = true

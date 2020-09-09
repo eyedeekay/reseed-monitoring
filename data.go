@@ -10,7 +10,7 @@ import (
 func Monitor(info map[string]string) []error {
 	var errs []error
 	for url, cert := range info {
-		data, err := MakeReseedDataMap(url, cert)
+		data, err := MakeReseedDataMap(url, cert, true)
 		if err != nil {
 			errs = append(errs, err)
 		}
@@ -26,7 +26,7 @@ func SortedMonitor(info []string) []error {
 	var errs []error
 	for _, kv := range info {
 		url, cert := Split(kv)
-		data, err := MakeReseedDataMap(url, cert)
+		data, err := MakeReseedDataMap(url, cert, true)
 		if err != nil {
 			errs = append(errs, err)
 		}
