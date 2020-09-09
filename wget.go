@@ -6,8 +6,8 @@ import (
 	"crypto/x509"
 	"io/ioutil"
 	"net/http"
-	"time"
 	"strings"
+	"time"
 	//"path"
 
 	"github.com/cretz/bine/tor"
@@ -31,9 +31,13 @@ func FetchReseed(url, cert string) ([]byte, error) {
 	dialCtx, dialCancel := context.WithTimeout(context.Background(), time.Minute)
 	defer dialCancel()
 	// Make connection
-	dialer, err := t.Dialer(dialCtx, nil)
-	if err != nil {
-		return nil, err
+	var dialer *tor.Dialer
+	if onion {
+		var err error
+		dialer, err = t.Dialer(dialCtx, nil)
+		if err != nil {
+			return nil, err
+		}
 	}
 	if cert != "le" {
 		caCert, err := ioutil.ReadFile(cert)
@@ -90,6 +94,8 @@ func FetchReseed(url, cert string) ([]byte, error) {
 		client = &http.Client{
 			Transport: &http.Transport{DialContext: dialer.DialContext},
 		}
+	} else {
+		client = &http.Client{}
 	}
 
 	req, err := http.NewRequest("GET", url, nil)
