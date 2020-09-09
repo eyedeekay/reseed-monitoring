@@ -19,6 +19,8 @@ func FetchReseed(url, cert string, onion bool) ([]byte, error) {
 	var t *tor.Tor
 	if strings.Contains(url, ".onion") {
 		onion = true
+	}
+	if onion {
 		var err error
 		t, err = tor.Start(nil, nil)
 		if err != nil {
